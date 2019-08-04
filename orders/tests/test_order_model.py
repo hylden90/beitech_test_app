@@ -4,7 +4,7 @@ from orders.models import Order, Customer, Product
 
 class OrderModelTests(TestCase):
 
-    def test_when_try_create_order_with_no_allowed_products_for_customer_raise_value_error(self):
+    def test_when_providing_order_with_not_allowed_products_for_customer_raise_value_error(self):
         
         new_customer = Customer(name='Mike', email='mike@mi.ke')
         new_customer.save()
@@ -23,12 +23,11 @@ class OrderModelTests(TestCase):
         invalid_order = Order()
         invalid_order.customer = new_customer
         invalid_order.save()
+        #This is ok!
         invalid_order.products.add(milk)
-        invalid_order.products.add(egg)
-        invalid_order.products.add(egg)
 
-        #Sorry Mike, you can't buy some of the products!
-        self.assertRaises(ValueError, invalid_order.save)
+        #Sorry Mike, you can't buy eggs!
+        self.assertRaises(ValueError, invalid_order.products.add, egg)
 
     def test_when_try_create_order_with_allowed_products_for_customer_process_successfully(self):
         
