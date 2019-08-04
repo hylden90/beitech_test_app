@@ -18,6 +18,8 @@ class OrderProducts(models.Model):
 
 @receiver(pre_save, sender=OrderProducts)
 def order_products_save_handler(sender, **kwargs):
-    if kwargs['instance'].product not in kwargs['instance'].order.customer.allowed_products.all():
+    order_item = kwargs['instance']
+    if order_item.product not in order_item.order.customer.allowed_products.all():
         raise ValueError('Product {} is not available for Customer {}'
-                         .format(kwargs['instance'].product, kwargs['instance'].order.customer))
+                         .format(order_item.product, order_item.order.customer))
+    
