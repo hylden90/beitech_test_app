@@ -22,4 +22,5 @@ def order_products_save_handler(sender, **kwargs):
     if order_item.product not in order_item.order.customer.allowed_products.all():
         raise ValueError('Product {} is not available for Customer {}'
                          .format(order_item.product, order_item.order.customer))
-    
+    order_item.order.total_price += order_item.product.price
+    order_item.order.save()
