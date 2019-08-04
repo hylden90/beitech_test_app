@@ -43,4 +43,19 @@ class OrderModelTests(TestCase):
         #Mike gets his product because is available for him.
         OrderProducts.objects.create(order = new_order, product = self.milk, quantity=1)
 
+    def test_when_providing_orders_with_products_orders_total_price_should_change_accordingly(self):
+
+        #Mike can now buy milk and cheese
+        self.mike.allowed_products.add(self.milk)
+        self.mike.allowed_products.add(self.cheese)
+
+        #Mike wants to buy milk and cheese
+        new_order = Order.objects.create(customer = self.mike)
+        OrderProducts.objects.create(order = new_order, product = self.milk, quantity=1)
+        OrderProducts.objects.create(order = new_order, product = self.cheese, quantity=1)
+
+        #Mike's order should add up
+        self.assertEqual(new_order.total_price, self.milk.price + self.cheese.price)
+
+
     
