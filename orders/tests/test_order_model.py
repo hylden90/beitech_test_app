@@ -29,7 +29,7 @@ class OrderModelTests(TestCase):
         #Sorry Mike, you can't buy eggs!
         self.assertRaises(ValueError, OrderProducts.objects.create, order = invalid_order, product = egg, quantity = 2)
 
-    def test_when_try_create_order_with_allowed_products_for_customer_process_successfully(self):
+    def test_when_providing_orders_with_allowed_products_for_customer_process_successfully(self):
         
         new_customer = Customer(name='Mike', email='mike@mi.ke')
         new_customer.save()
