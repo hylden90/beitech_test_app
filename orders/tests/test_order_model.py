@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from orders.models import Order, Customer, Product
+from orders.models import Order, Customer, Product, OrderProducts
 
 class OrderModelTests(TestCase):
 
@@ -24,10 +24,10 @@ class OrderModelTests(TestCase):
         invalid_order.customer = new_customer
         invalid_order.save()
         #This is ok!
-        invalid_order.products.add(milk)
+        OrderProducts.objects.create(order = invalid_order, product = milk, quantity=1)
 
         #Sorry Mike, you can't buy eggs!
-        self.assertRaises(ValueError, invalid_order.products.add, egg)
+        self.assertRaises(ValueError, OrderProducts.objects.create, order = invalid_order, product = egg, quantity = 2)
 
     def test_when_try_create_order_with_allowed_products_for_customer_process_successfully(self):
         
@@ -45,9 +45,9 @@ class OrderModelTests(TestCase):
         new_customer.allowed_products.add(cheese)
 
         #Mike wants to buy milk.
-        invalid_order = Order()
-        invalid_order.customer = new_customer
-        invalid_order.save()
+        new_order = Order()
+        new_order.customer = new_customer
+        new_order.save()
 
         #Mike gets his product because is available for him.
-        invalid_order.products.add(milk)
+        OrderProducts.objects.create(order = new_order, product = milk, quantity=1)
