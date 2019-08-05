@@ -3,6 +3,7 @@ from django.views import View
 from orders.models import Order, Customer, Product, OrderProducts
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from datetime import datetime, timezone, timedelta
 import json
 
 
@@ -44,5 +45,30 @@ class OrdersView(View):
                
 
     def get(self, request):
-        pass
+        try:
+            self.query_data = request.GET
+            self.customer_id = self.query_data['customer']
+            self.from_date = datetime.strptime(self.query_data['from'], '%Y-%m-%d')
+            self.from_date -= timedelta(days=1)
+            self.to_date = datetime.strptime(self.query_data['to'], '%Y-%m-%d')
+            self.to_date += timedelta(days=1)
+            self.orders = Order.objects.filter(customer_id=self.query_data['customer'],
+                                          creation_date__lte=self.to_date,
+                                          creation_date__gte=self.from_date)
+            response = []
+
+            for order in self.orders:
+                response.append({"orderId":order.id, 
+                                 "customerId":order.customer_id, 
+                                 "totalPrice":order.total_price,
+                                 "products":[]})
+                for product in order.products.all():
+                    order_product = OrderProducts.objects.get(order_id=order.id, product_id=product.id)
+                    response[len(response)-1]['products'].append({"name":product.name, "quantity":order_product.quantity})
+
+
+            return HttpResponse(json.dumps(response), status=200)
+        except KeyError as e:
+            response = {"Response":"Error", "Description":"customer, from and to arguments are required at query string"}
+            return HttpResponse(json.dumps(response), status=400)
             
