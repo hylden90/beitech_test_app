@@ -67,3 +67,23 @@ class OrdersViewTests(TestCase):
         input = {"customer":mike.id, "products":[mike.id, cheese.id]}
         response = self.client.post(self.path, json.dumps(input), 'application/json')
         self.assertEqual(201, response.status_code)
+
+    def test_when_get_order_with_no_customer_return_400(self):
+        data = {"from":"2019-07-01", "to":"2019-08-03"}
+        response = self.client.get(self.path, data)
+        self.assertEqual(400, response.status_code)
+
+    def test_when_get_order_with_no_from_date_return_400(self):
+        data = {"customer":1, "to":"2019-08-03"}
+        response = self.client.get(self.path, data)
+        self.assertEqual(400, response.status_code)
+
+    def test_when_get_order_with_no_to_date_return_400(self):
+        data = {"customer":1, "to":"2019-08-03"}
+        response = self.client.get(self.path, data)
+        self.assertEqual(400, response.status_code)
+
+    def test_when_get_order_with_required_fields_return_200(self):
+        data = {"customer":1, "from":"2019-07-01", "to":"2019-08-03"}
+        response = self.client.get(self.path, data)
+        self.assertEqual(200, response.status_code)
