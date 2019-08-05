@@ -1,1 +1,2 @@
 from .orders_view import OrdersView
+from .last_month_orders_view import LastMonthOrdersView

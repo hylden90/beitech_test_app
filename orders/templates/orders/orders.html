@@ -1,0 +1,18 @@
+<h1>Last month's orders for customer {{ customer }}</h1>
+
+<table border=1>
+    <tr>
+        <th>Order Id</th>
+        <th>Customer Id</th> 
+        <th>Total Price</th>
+        <th>Products</th>
+    </tr>
+    {% for order in orders %}
+        <tr>
+            <td>{{order.id}}</td>
+            <td>{{order.customer_id}}</td>
+            <td>{{order.total_price}}$</td>
+            <td>{% for product in order.products.all %} {{ product.name}} {% endfor %}</td>
+        </tr>
+    {% endfor %}
+ </table>
