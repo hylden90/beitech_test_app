@@ -7,3 +7,4 @@ CI Pipeline Status: [![CircleCI](https://circleci.com/gh/hylden90/beitech_test_a
 # Table of Contents
 1. [DB Entities Diagram](https://github.com/hylden90/beitech_test_app/wiki/DB-Entities-Diagram)
 2. [SQL Scripts to create model in database](https://github.com/hylden90/beitech_test_app/wiki/SQL-Scripts-for-tables-definition)
+3. [REST API Documentation](https://github.com/hylden90/beitech_test_app/wiki/API-Documentation)
