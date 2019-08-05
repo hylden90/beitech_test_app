@@ -61,6 +61,7 @@ class OrdersView(View):
                 response.append({"orderId":order.id, 
                                  "customerId":order.customer_id, 
                                  "totalPrice":order.total_price,
+                                 "creationTime":order.creation_date.strftime("%d-%b-%Y (%H:%M:%S.%f)"),
                                  "products":[]})
                 for product in order.products.all():
                     order_product = OrderProducts.objects.get(order_id=order.id, product_id=product.id)
